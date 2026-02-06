@@ -1,4 +1,4 @@
-# DebugPlot - VS Code Python Debug Plot Viewer
+# Plotevusk - VS Code Python Debug Plot Viewer
 
 ## Purpose
 A proof-of-concept VS Code extension that adds inline plotting capability to Python debugging sessions. Visualize numeric variables (lists and numpy arrays) as charts without leaving the debugger.
