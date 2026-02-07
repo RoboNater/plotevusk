@@ -5,10 +5,10 @@
 ## Project: DebugPlot VS Code Extension POC
 
 ### Current Status
-- **Phase:** Phase 2 - Read Variables from Debug Session (🚀 IN PROGRESS)
+- **Phase:** Phase 2 - Read Variables from Debug Session (✅ IMPLEMENTATION COMPLETE)
 - **Session:** 2
-- **Current Step:** Step 2 - Add Debug Session Detection
-- **Next Steps:** Implement DAP integration for reading variables
+- **Current Step:** Step 7 - Testing & Verification (READY FOR MANUAL TESTING)
+- **Next Steps:** User performs manual testing, then proceed to Phase 3 - Render Charts
 
 ### Environment Status
 ✅ **All Tools Ready:**
@@ -114,5 +114,30 @@
 - **Step 1: Create Python Test Script** ✅ COMPLETE
   - Created `poc/test-scripts/plot_test_basic.py` with 6 test variables
   - Verified script runs: `python3 plot_test_basic.py` → "done"
-  - Added Python debug launch config "Debug plot_test_basic.py" to `.vscode/launch.json`
-- **Now proceeding to Step 2: Add Debug Session Detection**
+  - Added Python debug launch config to `.vscode/launch.json`
+- **Step 2: Add Debug Session Detection** ✅ COMPLETE
+  - Made command handler async
+  - Added `vscode.debug.activeDebugSession` check
+  - Shows warning if no debug session active
+- **Step 3: Get Current Stack Frame ID** ✅ COMPLETE
+  - Implemented `threads` DAP request to get thread ID
+  - Implemented `stackTrace` DAP request to get frame ID
+  - Added error handling for missing threads/frames
+- **Step 4: Prompt User for Variable Name** ✅ COMPLETE
+  - Created `showInputBox` with helpful prompt
+  - Implemented regex validation for Python identifiers
+  - Allows dot notation and indexing (e.g., `obj.data`, `arr[0]`)
+- **Step 5: Evaluate Expression via DAP** ✅ COMPLETE
+  - Implemented auto-detect expression: `json.dumps(var.tolist() if hasattr(var, 'tolist') else list(var))`
+  - Uses DAP `evaluate` request with `context: 'repl'`
+  - Handles both lists and numpy arrays transparently
+- **Step 6: Parse the Result** ✅ COMPLETE
+  - Strip Python repr quotes from result
+  - Parse JSON string into `number[]` array
+  - Validate all elements are numeric
+  - Display success message with count
+- **Compilation & Commit** ✅ COMPLETE
+  - TypeScript compiles without errors
+  - Committed to git: commit 3e73af8
+  - Created Phase 2 testing guide: cc.004.phase-2-testing-guide.md
+- **Phase 2 Status:** ✅ IMPLEMENTATION COMPLETE - Ready for manual testing
