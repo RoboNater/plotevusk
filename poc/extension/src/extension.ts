@@ -15,6 +15,8 @@ export function activate(context: vscode.ExtensionContext) {
                 return;
             }
 
+            let variableName: string | undefined;
+
             try {
                 // Step 2: Get the current frame ID
                 const threadsResponse = await session.customRequest('threads');
@@ -41,7 +43,7 @@ export function activate(context: vscode.ExtensionContext) {
                 const frameId = stackResponse.stackFrames[0].id;
 
                 // Step 3: Prompt user for variable name
-                const variableName = await vscode.window.showInputBox({
+                variableName = await vscode.window.showInputBox({
                     prompt: 'Enter the variable name to plot',
                     placeHolder: 'e.g., data_list, data_np',
                     validateInput: (value) => {
@@ -85,7 +87,14 @@ export function activate(context: vscode.ExtensionContext) {
 
                 if (!Array.isArray(data) || !data.every(v => typeof v === 'number')) {
                     vscode.window.showErrorMessage(
-                        `DebugPlot: '${variableName}' is not a 1D numeric array.`
+                        `DebugPlot: No plottable data in '${variableName}' (cannot convert to array)`
+                    );
+                    return;
+                }
+
+                if (data.length === 0) {
+                    vscode.window.showErrorMessage(
+                        `DebugPlot: No plottable data in '${variableName}' (variable is empty)`
                     );
                     return;
                 }
@@ -97,9 +106,25 @@ export function activate(context: vscode.ExtensionContext) {
                 );
 
             } catch (err: any) {
-                vscode.window.showErrorMessage(
-                    `DebugPlot: Error getting frame info: ${err.message}`
-                );
+                const varName = variableName || 'variable';
+                let userMessage = err.message;
+
+                // Transform common Python errors into user-friendly messages
+                if (userMessage.includes("'NoneType' object is not iterable")) {
+                    userMessage = `No plottable data in '${varName}' (variable is None)`;
+                } else if (userMessage.includes("is not iterable")) {
+                    userMessage = `No plottable data in '${varName}' (cannot convert to array)`;
+                } else if (userMessage.includes("Unable to find thread")) {
+                    userMessage = "Debugger is running but not paused. Pause at a breakpoint first.";
+                } else if (userMessage.includes("name '") && userMessage.includes("is not defined")) {
+                    // Keep the Python error message as-is for undefined variables (clear enough)
+                    userMessage = `Error reading '${varName}': ${userMessage}`;
+                } else {
+                    // For other errors, add context
+                    userMessage = `Error reading '${varName}': ${userMessage}`;
+                }
+
+                vscode.window.showErrorMessage(`DebugPlot: ${userMessage}`);
                 console.error('DebugPlot error:', err);
             }
         }

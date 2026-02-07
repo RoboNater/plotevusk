@@ -10,5 +10,14 @@ data_int_range = list(range(10))
 data_single = [42]
 data_negative = [-3, -1, 0, 1, 3]
 
+# Exception cases
+data_scalar = 5  # scalar, Not a list or array
+data_string = 'hello'  # string, Not a list or array
+data_null = None  # NoneType, Not a list or array
+
+# Delay 60 seconds
+import time
+time.sleep(500)
+
 # Set breakpoint on the next line
 print("done")  # <-- Breakpoint here
