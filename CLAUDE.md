@@ -1,13 +1,14 @@
 # CLAUDE.md - AI Assistant Working Memory
 
-**Last Updated:** 2026-02-06 (Session 1)
+**Last Updated:** 2026-02-06 (Session 2)
 
 ## Project: DebugPlot VS Code Extension POC
 
 ### Current Status
-- **Phase:** Phase 1 - Scaffold & Hello World (✅ COMPLETE & VERIFIED)
-- **Session:** 1
-- **Next Steps:** Begin Phase 2 - Read Variables from Debug Session
+- **Phase:** Phase 2 - Read Variables from Debug Session (🚀 IN PROGRESS)
+- **Session:** 2
+- **Current Step:** Step 2 - Add Debug Session Detection
+- **Next Steps:** Implement DAP integration for reading variables
 
 ### Environment Status
 ✅ **All Tools Ready:**
@@ -107,3 +108,11 @@
 - User completed manual testing successfully
 - Created Phase 1 accomplishment report (cc.002.accomplished-phase-1.md)
 - **Phase 1 Status:** ✅ COMPLETE & VERIFIED - Ready for Phase 2
+
+**Session 2 (2026-02-06):**
+- Read CLAUDE.md and Phase 2 detailed plan (cc.003.plan-phase-2-detailed.md)
+- **Step 1: Create Python Test Script** ✅ COMPLETE
+  - Created `poc/test-scripts/plot_test_basic.py` with 6 test variables
+  - Verified script runs: `python3 plot_test_basic.py` → "done"
+  - Added Python debug launch config "Debug plot_test_basic.py" to `.vscode/launch.json`
+- **Now proceeding to Step 2: Add Debug Session Detection**

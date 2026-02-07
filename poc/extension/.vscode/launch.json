@@ -25,6 +25,14 @@
         "${workspaceFolder}/out/test/**/*.js"
       ],
       "preLaunchTask": "${defaultBuildTask}"
+    },
+    {
+      "name": "Debug plot_test_basic.py",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/../test-scripts/plot_test_basic.py",
+      "console": "integratedTerminal",
+      "justMyCode": false
     }
   ]
 }
