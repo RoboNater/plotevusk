@@ -9,6 +9,7 @@ This project is developing a proof-of-concept VS Code extension that adds inline
 - Node.js 18+ (we're using v24.11.1 via NVM)
 - Python 3.x with numpy
 - VS Code with Python and Python Debugger extensions
+- debugpy installed for Python debugging (usually included with VS Code Python extension)
 
 ### Development Setup
 ```bash
@@ -27,8 +28,12 @@ npm run compile
 # Test the extension
 # 1. Open poc/extension/ folder in VS Code
 # 2. Press F5 to launch Extension Development Host
-# 3. In Extension Development Host: Ctrl+Shift+P → "DebugPlot: Plot Variable"
-# 4. Should see: "Hello from DebugPlot! Ready to plot variables."
+# 3. In the Dev Host, open poc/test-scripts/plot_test_basic.py
+# 4. Set a breakpoint on the print("done") line
+# 5. Press F5 to debug the Python script (select "Debug plot_test_basic.py")
+# 6. When paused at breakpoint: Ctrl+Shift+P → "DebugPlot: Plot Variable"
+# 7. Type "data_list" → Should see: "DebugPlot: Read 7 numeric values from 'data_list'"
+# 8. Check Debug Console to see extracted values: [1, 4, 9, 16, 25, 36, 49]
 ```
 
 ## Key Documents
@@ -37,6 +42,8 @@ npm run compile
 - **[High-Level POC Plan](poc/docs/debugplot-poc-plan.md)** - Overall architecture and phase breakdown
 - **[Phase 1 Detailed Plan](poc/docs/cc.001.plan-phase-1-detailed.md)** - Step-by-step Phase 1 implementation
 - **[Phase 1 Accomplishment Report](poc/docs/cc.002.accomplished-phase-1.md)** - Phase 1 completion summary ✅
+- **[Phase 2 Detailed Plan](poc/docs/cc.003.plan-phase-2-detailed.md)** - DAP integration and variable reading (7 implementation steps)
+- **[Phase 2 Testing Guide](poc/docs/cc.004.phase-2-testing-guide.md)** - Instructions for testing Phase 2 functionality ✅
 
 ### Project Management
 - **[README.md](README.md)** - Project status and high-level info
@@ -74,16 +81,23 @@ npm run compile
    - ✅ Generate extension project
    - ✅ Register basic command (`debugplot.plotVariable`)
    - ✅ Verified in Extension Development Host - all tests passed
+   - Commit: `d8394e2`
 
-2. **Phase 2** - Read Variables from Debug Session (NEXT)
-   - Hook into active debug session
-   - Evaluate expressions using DAP
-   - Serialize data to JSON
+2. **Phase 2** - Read Variables from Debug Session ✅ IMPLEMENTATION COMPLETE
+   - ✅ Create Python test script with sample data
+   - ✅ Detect active debug session (show warning if none)
+   - ✅ Retrieve thread and stack frame IDs via DAP
+   - ✅ Prompt user for variable name with validation
+   - ✅ Evaluate serialization expression via DAP `evaluate` request
+   - ✅ Parse JSON result and validate numeric array
+   - ✅ Display extracted data count to user
+   - ⏳ **Ready for manual testing** - See [Phase 2 Testing Guide](poc/docs/cc.004.phase-2-testing-guide.md)
+   - Commits: `3e73af8`, `9db31a5`
 
-3. **Phase 3** - Render Plots
+3. **Phase 3** - Render Plots (NEXT)
    - Create webview panel
-   - Bundle charting library
-   - Display data as charts
+   - Bundle charting library (Chart.js)
+   - Display data as interactive line chart
 
 4. **Phase 4** - Integration
    - Add context menu entries
@@ -91,7 +105,7 @@ npm run compile
    - End-to-end testing
 
 5. **Phase 5** - Polish & Package
-   - Error handling
+   - Error handling refinements
    - Package as .vsix
    - Installation testing
 
@@ -118,24 +132,34 @@ npm run compile
 
 ## Testing
 
-### Test Script
-Create a simple Python file with numeric data:
-```python
-import numpy as np
+### Phase 2 Testing (Current)
 
-data = [1, 4, 9, 16, 25, 36, 49]
-arr = np.array([2.0, 3.1, 5.2, 4.8, 7.1, 6.5])
-# Set breakpoint here
-print("done")
-```
+**Test Script:** `poc/test-scripts/plot_test_basic.py`
+Contains 6 sample variables:
+- `data_list` - Simple list: [1, 4, 9, 16, 25, 36, 49]
+- `data_np` - Numpy array: [2.0, 3.1, 5.2, 4.8, 7.1, 6.5]
+- `data_float_list` - Float list: [1.1, 2.2, 3.3, 4.4, 5.5]
+- `data_int_range` - Range list: [0, 1, 2, ..., 9]
+- `data_single` - Single element: [42]
+- `data_negative` - With negatives: [-3, -1, 0, 1, 3]
 
-### Testing Workflow
-1. Open test script in VS Code
-2. Set breakpoint
-3. Start debugging (F5)
-4. When paused, right-click variable
-5. Select "Plot Variable"
-6. Verify chart appears in webview
+**Testing Workflow:**
+1. Open `poc/extension/` in VS Code
+2. Press F5 to launch Extension Development Host
+3. In Dev Host, open `poc/test-scripts/plot_test_basic.py`
+4. Set breakpoint on `print("done")` line
+5. Press F5 to debug the Python script
+6. When paused at breakpoint: Ctrl+Shift+P → "DebugPlot: Plot Variable"
+7. Enter variable name (e.g., `data_list`)
+8. Verify success message and check Debug Console for extracted values
+9. Test error cases: non-existent variable, invalid name, no debug session
+
+**Full Instructions:** See [Phase 2 Testing Guide](poc/docs/cc.004.phase-2-testing-guide.md)
+
+### Future Testing (Phase 3+)
+- Verify webview panel creation
+- Verify Chart.js rendering
+- Test chart interactivity
 
 ## Known Limitations (POC Scope)
 - Only 1D numeric data (lists and numpy arrays)
