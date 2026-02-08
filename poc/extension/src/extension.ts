@@ -99,11 +99,10 @@ export function activate(context: vscode.ExtensionContext) {
                     return;
                 }
 
-                // Step 6: Success — display the data
+                // Step 6: Success — create the chart panel
                 console.log(`DebugPlot: Read ${data.length} values from '${variableName}':`, data);
-                vscode.window.showInformationMessage(
-                    `DebugPlot: Read ${data.length} numeric values from '${variableName}'`
-                );
+                createPlotPanel(context, variableName, data as number[]);
+                console.log(`DebugPlot: Created chart panel for '${variableName}' with ${data.length} values`);
 
             } catch (err: any) {
                 const varName = variableName || 'variable';
@@ -131,6 +130,178 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(disposable);
+}
+
+function createPlotPanel(
+    context: vscode.ExtensionContext,
+    variableName: string,
+    data: number[]
+): vscode.WebviewPanel {
+    const panel = vscode.window.createWebviewPanel(
+        'debugplotChart',
+        `Plot: ${variableName}`,
+        vscode.ViewColumn.Beside,
+        {
+            enableScripts: true,
+            retainContextWhenHidden: true
+        }
+    );
+
+    panel.webview.html = getWebviewContent();
+
+    panel.webview.postMessage({
+        variableName: variableName,
+        values: data
+    });
+
+    return panel;
+}
+
+function getWebviewContent(): string {
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'none';
+                   script-src 'unsafe-inline' https://cdn.jsdelivr.net;
+                   style-src 'unsafe-inline';
+                   img-src https: data:;">
+    <title>DebugPlot Chart</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 16px;
+            background-color: var(--vscode-editor-background);
+            color: var(--vscode-editor-foreground);
+            font-family: var(--vscode-font-family);
+        }
+        #chartContainer {
+            position: relative;
+            height: 70vh;
+            width: 100%;
+        }
+        h2 {
+            margin-top: 0;
+            color: var(--vscode-editor-foreground);
+        }
+        .info {
+            margin-top: 16px;
+            font-size: 0.9em;
+            color: var(--vscode-descriptionForeground);
+        }
+    </style>
+</head>
+<body>
+    <h2 id="chartTitle">Preparing chart...</h2>
+    <div id="chartContainer">
+        <canvas id="chartCanvas"></canvas>
+    </div>
+    <p class="info">Run the command again to plot a different variable.</p>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const vscode = acquireVsCodeApi();
+        let chart = null;
+
+        window.addEventListener('message', event => {
+            const message = event.data;
+            console.log('DebugPlot webview received:', message);
+
+            if (message.variableName && message.values) {
+                renderChart(message.variableName, message.values);
+            }
+        });
+
+        function renderChart(variableName, values) {
+            if (!values || values.length === 0) {
+                document.getElementById('chartTitle').textContent =
+                    \`Error: No data to plot for \${variableName}\`;
+                return;
+            }
+
+            document.getElementById('chartTitle').textContent =
+                \`Plot: \${variableName} (\${values.length} values)\`;
+
+            const labels = values.map((_, index) => index);
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            const ctx = document.getElementById('chartCanvas');
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: variableName,
+                        data: values,
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderWidth: 2,
+                        pointRadius: 3,
+                        pointHoverRadius: 5,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                color: getComputedStyle(document.body)
+                                    .getPropertyValue('--vscode-editor-foreground')
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Index',
+                                color: getComputedStyle(document.body)
+                                    .getPropertyValue('--vscode-editor-foreground')
+                            },
+                            ticks: {
+                                color: getComputedStyle(document.body)
+                                    .getPropertyValue('--vscode-editor-foreground')
+                            },
+                            grid: {
+                                color: getComputedStyle(document.body)
+                                    .getPropertyValue('--vscode-editorWidget-border')
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Value',
+                                color: getComputedStyle(document.body)
+                                    .getPropertyValue('--vscode-editor-foreground')
+                            },
+                            ticks: {
+                                color: getComputedStyle(document.body)
+                                    .getPropertyValue('--vscode-editor-foreground')
+                            },
+                            grid: {
+                                color: getComputedStyle(document.body)
+                                    .getPropertyValue('--vscode-editorWidget-border')
+                            }
+                        }
+                    }
+                }
+            });
+
+            console.log(\`Chart rendered for \${variableName}\`);
+        }
+
+        console.log('DebugPlot webview loaded and listening');
+    </script>
+</body>
+</html>`;
 }
 
 export function deactivate() {}
