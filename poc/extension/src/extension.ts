@@ -5,7 +5,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     let disposable = vscode.commands.registerCommand(
         'debugplot.plotVariable',
-        async () => {
+        async (context?: any) => {
             // Step 1: Check for active debug session
             const session = vscode.debug.activeDebugSession;
             if (!session) {
@@ -18,7 +18,36 @@ export function activate(context: vscode.ExtensionContext) {
             let variableName: string | undefined;
 
             try {
-                // Step 2: Get the current frame ID
+                // Step 2: Get variable name from context or prompt
+                if (context && (context.evaluateName || context.name)) {
+                    variableName = context.evaluateName || context.name;
+                    console.log(`DebugPlot: Variable from context menu: '${variableName}'`);
+                } else {
+                    variableName = await vscode.window.showInputBox({
+                        prompt: 'Enter the variable name to plot',
+                        placeHolder: 'e.g., data_list, data_np',
+                        validateInput: (value) => {
+                            if (!value || !value.trim()) {
+                                return 'Variable name cannot be empty';
+                            }
+                            if (!/^[a-zA-Z_][a-zA-Z0-9_.\[\]]*$/.test(value.trim())) {
+                                return 'Invalid variable name';
+                            }
+                            return null;
+                        }
+                    });
+
+                    if (!variableName) {
+                        return; // User cancelled
+                    }
+                }
+
+                // Ensure variableName is defined (TypeScript type guard)
+                if (!variableName) {
+                    return;
+                }
+
+                // Step 3: Get the current frame ID
                 const threadsResponse = await session.customRequest('threads');
                 if (!threadsResponse.threads || threadsResponse.threads.length === 0) {
                     vscode.window.showWarningMessage(
@@ -41,25 +70,6 @@ export function activate(context: vscode.ExtensionContext) {
                     return;
                 }
                 const frameId = stackResponse.stackFrames[0].id;
-
-                // Step 3: Prompt user for variable name
-                variableName = await vscode.window.showInputBox({
-                    prompt: 'Enter the variable name to plot',
-                    placeHolder: 'e.g., data_list, data_np',
-                    validateInput: (value) => {
-                        if (!value || !value.trim()) {
-                            return 'Variable name cannot be empty';
-                        }
-                        if (!/^[a-zA-Z_][a-zA-Z0-9_.\[\]]*$/.test(value.trim())) {
-                            return 'Invalid variable name';
-                        }
-                        return null;
-                    }
-                });
-
-                if (!variableName) {
-                    return; // User cancelled
-                }
 
                 // Step 4: Evaluate expression to serialize variable as JSON
                 const expression =

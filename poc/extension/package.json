@@ -11,7 +11,7 @@
     "Visualization"
   ],
   "activationEvents": [
-    "onCommand:debugplot.plotVariable"
+    "onDebug"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -21,7 +21,15 @@
         "title": "Plot Variable",
         "category": "DebugPlot"
       }
-    ]
+    ],
+    "menus": {
+      "debug/variables/context": [
+        {
+          "command": "debugplot.plotVariable",
+          "when": "debugType == 'python'"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
