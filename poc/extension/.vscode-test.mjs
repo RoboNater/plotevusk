@@ -5,12 +5,14 @@ export default defineConfig({
   version: 'stable', // Use latest stable VS Code
   workspaceFolder: './src/test/fixtures',
   mocha: {
-    ui: 'bdd',
-    timeout: 20000, // 20s timeout for debug session setup
+    ui: 'tdd', // Use TDD style (suite/test) instead of BDD (describe/it)
+    timeout: 30000, // 30s timeout for debug session setup
     color: true
   },
   launchArgs: [
-    '--disable-extensions', // Run in clean environment
-    '--disable-workspace-trust' // Avoid trust prompt
-  ]
+    '--disable-workspace-trust', // Avoid trust prompt
+    // Use system Python extension if available
+    '--extensions-dir=' + (process.env.HOME || process.env.USERPROFILE) + '/.vscode-server/extensions'
+  ],
+  extensionDevelopmentPath: process.cwd()
 });

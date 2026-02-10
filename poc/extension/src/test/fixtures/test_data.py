@@ -13,5 +13,7 @@ data_none = None
 data_scalar = 42
 data_undefined_var = None  # Represents an undefined variable
 
-# Breakpoint on the line below
-print("Test data loaded")  # <-- Breakpoint here
+# Breakpoint to stop here for testing
+print("Test data loaded")
+breakpoint()  # Python debugger will stop here
+print("done")

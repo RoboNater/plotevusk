@@ -305,20 +305,13 @@ suite('DebugPlot Integration Tests', () => {
 
   suite('Command Palette Code Path', () => {
 
-    test('Command works without context (input prompt path)', async () => {
-      // We can't easily mock showInputBox in tests, but we can verify
-      // the command accepts no parameters
+    test('Command works without context (input prompt path)', async function() {
+      // Skip this test - we can't interact with input boxes in automated tests
+      // Manual testing confirms this works (see cc.013.manual-testing-checklist.md)
+      this.skip();
 
-      // Execute without context - this would normally show input box
-      // In test environment, it may fail or timeout, which is expected
-      try {
-        const result = await vscode.commands.executeCommand('debugplot.plotVariable');
-        // If it completes, that's fine
-        assert.ok(true, 'Command accepts no parameters');
-      } catch (error) {
-        // Expected - input box interaction can't complete in test environment
-        assert.ok(true, 'Input box path may not complete in tests');
-      }
+      // The code below would hang waiting for input box interaction:
+      // await vscode.commands.executeCommand('debugplot.plotVariable');
     });
   });
 
