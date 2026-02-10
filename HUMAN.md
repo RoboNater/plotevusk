@@ -49,7 +49,11 @@ npm run compile
 - **[Phase 3 Testing Guide](poc/docs/cc.007.phase-3-testing-guide.md)** - Instructions for testing Phase 3 functionality ✅
 - **[Phase 3 Accomplishment Report](poc/docs/cc.008.accomplished-phase-3.md)** - Phase 3 completion summary ✅
 - **[Phase 4 Detailed Plan](poc/docs/cc.009.plan-phase-4-detailed.md)** - Context menu integration with DAP
-- **[Phase 4 Testing Guide](poc/docs/cc.010.phase-4-testing-guide.md)** - Instructions for testing Phase 4 functionality 🟢 (NEXT TESTING PHASE)
+- **[Phase 4 Testing Guide](poc/docs/cc.010.phase-4-testing-guide.md)** - Instructions for testing Phase 4 functionality ✅
+- **[Phase 5 Testing Options Analysis](poc/docs/cc.011.analysis-options-for-automated-testing.md)** - Analysis of automated testing approaches
+- **[Phase 5 Detailed Plan](poc/docs/cc.012.plan-automated-testing-detailed.md)** - Hybrid testing infrastructure implementation
+- **[Phase 5 Manual Testing Checklist](poc/docs/cc.013.manual-testing-checklist.md)** - 5-minute visual verification checklist ✅
+- **[Phase 5 Testing Guide](poc/docs/cc.014.testing-guide.md)** - Comprehensive guide for running automated and manual tests ✅
 
 ### Project Management
 - **[README.md](README.md)** - Project status and high-level info
@@ -113,7 +117,7 @@ npm run compile
    - Commit: `9fc398d`
    - Report: [Phase 3 Accomplishment Report](poc/docs/cc.008.accomplished-phase-3.md)
 
-4. **Phase 4** - Context Menu Integration ✅ IMPLEMENTATION COMPLETE (TESTING PHASE)
+4. **Phase 4** - Context Menu Integration ✅ COMPLETE
    - ✅ Add `debug/variables/context` menu contribution
    - ✅ Configure `onDebug` activation event
    - ✅ Extract variable context from menu invocation
@@ -121,13 +125,25 @@ npm run compile
    - ✅ Fallback to input prompt for Command Palette invocation
    - ✅ Restrict context menu to Python debug sessions only
    - Commit: `c52efd8`
-   - Testing Guide: [Phase 4 Testing Guide](poc/docs/cc.010.phase-4-testing-guide.md) 🟢 READY FOR TESTING
+   - Testing Guide: [Phase 4 Testing Guide](poc/docs/cc.010.phase-4-testing-guide.md)
 
-5. **Phase 5** - Polish & Package (NEXT)
+5. **Phase 5** - Automated Testing Infrastructure ✅ COMPLETE
+   - ✅ Create test runner configuration (`.vscode-test.mjs`)
+   - ✅ Set up test fixtures with isolated test workspace
+   - ✅ Implement 18 integration tests covering all major functionality
+   - ✅ Create manual testing checklist for visual verification (5 minutes)
+   - ✅ Document comprehensive testing approach and troubleshooting
+   - ✅ Achieve 70-75% automated coverage + 25-30% manual visual checks
+   - Commit: `9f89fb1`
+   - Testing Guide: [Phase 5 Testing Guide](poc/docs/cc.014.testing-guide.md)
+   - Run tests: `cd poc/extension && npm test`
+
+6. **Phase 6** - Polish & Package (NEXT)
    - Error handling refinements
+   - Performance review (large arrays 1000+ elements)
    - Package as .vsix with `vsce package`
    - Installation and smoke testing
-   - Final documentation
+   - Final documentation and demo screenshots
 
 ## Resources
 
@@ -151,6 +167,39 @@ npm run compile
 - [Publishing Extensions](https://code.visualstudio.com/api/working-with-extensions/publishing-extension)
 
 ## Testing
+
+### Running Automated Tests
+
+**Quick Start:**
+```bash
+cd poc/extension
+npm test
+```
+
+This runs 18 integration tests that verify:
+- Extension activation and command registration
+- Debug session requirement enforcement
+- Variable data reading via DAP (all test variables)
+- Error handling (None, scalar, undefined, empty arrays)
+- Context menu and Command Palette code paths
+- Webview panel creation and titles
+
+**Expected output:** All tests passing in ~15-30 seconds
+
+**For details:** See [Phase 5 Testing Guide](poc/docs/cc.014.testing-guide.md)
+
+### Manual Testing Checklist
+
+After running automated tests, perform visual verification:
+
+**Quick checklist (~5 minutes):**
+1. Chart visual rendering
+2. Theme integration (light)
+3. Theme integration (dark)
+4. Context menu UI presence
+5. Context menu language filtering
+
+**For details:** See [Phase 5 Manual Testing Checklist](poc/docs/cc.013.manual-testing-checklist.md)
 
 ### How to Use the Extension (Current Capabilities)
 

@@ -112,17 +112,36 @@ print("done")
 10. **Post the data** from the extension to the webview using `webview.postMessage()`
 11. **Render a line chart** from the received data array
 
-### Phase 4 — Wire It All Together
+### Phase 4 — Context Menu Integration
 
 12. **Add a context menu entry** so "Plot Variable" appears when right-clicking in the Variables pane during a debug session (via `menus` contribution in `package.json`)
 13. **Add an activation event** — `onDebug` so the extension activates only during debug sessions
-14. **End-to-end test** — debug the test Python script, pause at breakpoint, right-click `data`, see a line chart
+14. **Update command handler** to accept context parameter from right-click events
+15. **Extract variable name** from context (evaluateName or name property)
+16. **End-to-end test** — debug the test Python script, pause at breakpoint, right-click `data`, see a line chart
 
-### Phase 5 — Polish & Package
+### Phase 5 — Automated Testing Infrastructure
 
-15. **Error handling** — graceful messages when no debug session is active, variable isn't plottable, etc.
-16. **Package locally** with `vsce package` to produce a `.vsix` file
-17. **Install and test** via `code --install-extension debugplot-0.0.1.vsix`
+17. **Create test runner configuration** — `.vscode-test.mjs` for VS Code integration tests
+18. **Set up test fixtures** — isolated test workspace with Python test script and debug config
+19. **Implement integration test suite** — 18 automated tests covering:
+    - Extension activation and command registration
+    - Debug session requirement enforcement
+    - Variable data reading via DAP (all test variables)
+    - Error handling (None, scalar, undefined, empty arrays)
+    - Context menu and Command Palette code paths
+    - Webview panel creation and titles
+20. **Create manual testing checklist** — streamlined 5-minute visual verification for chart rendering and UI
+21. **Document testing approach** — comprehensive testing guide with troubleshooting and CI/CD setup
+22. **Verify test coverage** — achieve 70-75% automated coverage + 25-30% manual visual checks
+
+### Phase 6 — Polish & Package
+
+23. **Final error handling review** — ensure graceful messages for all edge cases
+24. **Performance review** — test with large arrays (1000+ elements)
+25. **Package locally** with `vsce package` to produce a `.vsix` file
+26. **Install and test** via `code --install-extension debugplot-0.0.1.vsix`
+27. **Documentation cleanup** — finalize README, add usage examples, create demo screenshots
 
 ---
 
