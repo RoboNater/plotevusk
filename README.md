@@ -7,15 +7,15 @@ A proof-of-concept VS Code extension that adds inline plotting capability to Pyt
 
 ## Status
 - **Start Date:** 2026-02-06
-- **Current Phase:** Phase 2 - Read Variables from Debug Session ✅ COMPLETE & TESTED
-- **Development Status:** 🟢 Ready for Phase 3
+- **Current Phase:** Phase 4 - Context Menu Integration ✅ IMPLEMENTATION COMPLETE, READY FOR TESTING
+- **Development Status:** 🟢 Ready for Manual Testing
 
 ### Phase Progress
 - [✅] Phase 1 - Scaffold & Hello World **COMPLETE**
 - [✅] Phase 2 - Read Variables from Debug Session **COMPLETE & TESTED**
-- [ ] Phase 3 - Render Plots in Webview (NEXT)
-- [ ] Phase 4 - Integration & End-to-End Testing
-- [ ] Phase 5 - Polish & Package
+- [✅] Phase 3 - Render Plots in Webview **COMPLETE**
+- [✅] Phase 4 - Context Menu Integration **IMPLEMENTATION COMPLETE** (TESTING PHASE)
+- [ ] Phase 5 - Polish & Package (NEXT)
 
 ## Quick Overview
 
@@ -94,11 +94,30 @@ Uses only permissive open-source licenses (MIT, Apache 2.0, BSD).
 - ✅ Improved error messages with consistent format
 - ✅ Phase 2 accomplishment report created
 
-**What Works Now:**
-While debugging Python code, pause at a breakpoint, run "DebugPlot: Plot Variable", enter a variable name (e.g., `data_list`), and the extension successfully extracts numeric values from Python lists and numpy arrays. User-friendly error messages guide proper usage.
+**Session 4 (2026-02-07):** Phase 3 - Chart Rendering
+- ✅ Implemented webview panel creation with Chart.js
+- ✅ Rendered line charts from numeric data
+- ✅ Integrated VS Code theme support (light/dark mode)
+- ✅ Responsive chart sizing and layout
+- ✅ Phase 3 testing guide created
 
-**Next:** Phase 3 will add chart rendering in a webview panel.
+**Session 5 (2026-02-10):** Phase 4 - Context Menu Integration
+- ✅ Added context menu for right-click variables in Variables pane
+- ✅ Implemented variable context extraction from VS Code DAP
+- ✅ Added `onDebug` activation event for automatic extension loading
+- ✅ Maintained Command Palette fallback with input prompt
+- ✅ Restricted context menu to Python debug sessions only
+- ✅ Phase 4 testing guide created
+
+**What Works Now:**
+- ✅ Right-click variables in Variables pane → "Plot Variable" → instant chart visualization
+- ✅ Command Palette fallback: "DebugPlot: Plot Variable" → enter variable name → chart
+- ✅ Supports Python lists and NumPy arrays
+- ✅ Automatic extension activation during Python debug sessions
+- ✅ User-friendly error messages for invalid data
+
+**Next:** Phase 5 will polish the extension and prepare it for packaging and distribution.
 
 ---
 
-*Last Updated: 2026-02-07 - Phase 2 Complete & Tested, Ready for Phase 3*
+*Last Updated: 2026-02-10 - Phase 4 Implementation Complete, Testing Phase*

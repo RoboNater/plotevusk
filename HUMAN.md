@@ -45,6 +45,11 @@ npm run compile
 - **[Phase 2 Detailed Plan](poc/docs/cc.003.plan-phase-2-detailed.md)** - DAP integration and variable reading (7 implementation steps)
 - **[Phase 2 Testing Guide](poc/docs/cc.004.phase-2-testing-guide.md)** - Instructions for testing Phase 2 functionality ✅
 - **[Phase 2 Accomplishment Report](poc/docs/cc.005.accomplished-phase-2.md)** - Phase 2 completion summary ✅
+- **[Phase 3 Detailed Plan](poc/docs/cc.006.plan-phase-3-detailed.md)** - Webview panel and Chart.js integration
+- **[Phase 3 Testing Guide](poc/docs/cc.007.phase-3-testing-guide.md)** - Instructions for testing Phase 3 functionality ✅
+- **[Phase 3 Accomplishment Report](poc/docs/cc.008.accomplished-phase-3.md)** - Phase 3 completion summary ✅
+- **[Phase 4 Detailed Plan](poc/docs/cc.009.plan-phase-4-detailed.md)** - Context menu integration with DAP
+- **[Phase 4 Testing Guide](poc/docs/cc.010.phase-4-testing-guide.md)** - Instructions for testing Phase 4 functionality 🟢 (NEXT TESTING PHASE)
 
 ### Project Management
 - **[README.md](README.md)** - Project status and high-level info
@@ -83,6 +88,7 @@ npm run compile
    - ✅ Register basic command (`debugplot.plotVariable`)
    - ✅ Verified in Extension Development Host - all tests passed
    - Commit: `d8394e2`
+   - Report: [Phase 1 Accomplishment Report](poc/docs/cc.002.accomplished-phase-1.md)
 
 2. **Phase 2** - Read Variables from Debug Session ✅ COMPLETE & TESTED
    - ✅ Create Python test script with sample data
@@ -97,20 +103,31 @@ npm run compile
    - Commits: `3e73af8`, `d5b63fe`
    - Report: [Phase 2 Accomplishment Report](poc/docs/cc.005.accomplished-phase-2.md)
 
-3. **Phase 3** - Render Plots (NEXT)
-   - Create webview panel
-   - Bundle charting library (Chart.js)
-   - Display data as interactive line chart
+3. **Phase 3** - Render Plots ✅ COMPLETE
+   - ✅ Create webview panel with `vscode.window.createWebviewPanel`
+   - ✅ Bundle charting library (Chart.js via CDN)
+   - ✅ Display data as interactive line chart
+   - ✅ Theme support (light/dark mode using VS Code CSS variables)
+   - ✅ Responsive chart sizing and layout
+   - ✅ Message passing from extension to webview
+   - Commit: `9fc398d`
+   - Report: [Phase 3 Accomplishment Report](poc/docs/cc.008.accomplished-phase-3.md)
 
-4. **Phase 4** - Integration
-   - Add context menu entries
-   - Configure activation events
-   - End-to-end testing
+4. **Phase 4** - Context Menu Integration ✅ IMPLEMENTATION COMPLETE (TESTING PHASE)
+   - ✅ Add `debug/variables/context` menu contribution
+   - ✅ Configure `onDebug` activation event
+   - ✅ Extract variable context from menu invocation
+   - ✅ Accept optional variable context in command handler
+   - ✅ Fallback to input prompt for Command Palette invocation
+   - ✅ Restrict context menu to Python debug sessions only
+   - Commit: `c52efd8`
+   - Testing Guide: [Phase 4 Testing Guide](poc/docs/cc.010.phase-4-testing-guide.md) 🟢 READY FOR TESTING
 
-5. **Phase 5** - Polish & Package
+5. **Phase 5** - Polish & Package (NEXT)
    - Error handling refinements
-   - Package as .vsix
-   - Installation testing
+   - Package as .vsix with `vsce package`
+   - Installation and smoke testing
+   - Final documentation
 
 ## Resources
 
@@ -135,7 +152,25 @@ npm run compile
 
 ## Testing
 
-### Phase 2 Testing (Current)
+### How to Use the Extension (Current Capabilities)
+
+**Method 1: Right-Click Context Menu (RECOMMENDED)**
+1. Start debugging Python code (F5)
+2. Pause at a breakpoint
+3. In the Debug Sidebar, expand the **Variables** pane
+4. Right-click on a numeric variable (e.g., `data_list`, `data_np`)
+5. Select "Plot Variable" from the context menu
+6. Chart renders instantly in a new webview panel
+
+**Method 2: Command Palette (Fallback)**
+1. Start debugging Python code (F5)
+2. Pause at a breakpoint
+3. Press Ctrl+Shift+P to open Command Palette
+4. Type "DebugPlot" and select "DebugPlot: Plot Variable"
+5. Enter the variable name in the input prompt
+6. Chart renders in a new webview panel
+
+### Phase 4 Testing (Current - READY FOR MANUAL TESTING)
 
 **Test Script:** `poc/test-scripts/plot_test_basic.py`
 Contains 6 sample variables:
@@ -152,17 +187,22 @@ Contains 6 sample variables:
 3. In Dev Host, open `poc/test-scripts/plot_test_basic.py`
 4. Set breakpoint on `print("done")` line
 5. Press F5 to debug the Python script
-6. When paused at breakpoint: Ctrl+Shift+P → "DebugPlot: Plot Variable"
-7. Enter variable name (e.g., `data_list`)
-8. Verify success message and check Debug Console for extracted values
-9. Test error cases: non-existent variable, invalid name, no debug session
+6. When paused at breakpoint:
+   - **Context Menu:** Right-click `data_list` in Variables pane → "Plot Variable"
+   - **Command Palette:** Ctrl+Shift+P → "DebugPlot: Plot Variable" → type `data_list`
+7. Verify chart renders correctly
+8. Test both invocation methods to ensure both work
 
-**Full Instructions:** See [Phase 2 Testing Guide](poc/docs/cc.004.phase-2-testing-guide.md)
+**Full Instructions:** See [Phase 4 Testing Guide](poc/docs/cc.010.phase-4-testing-guide.md)
 
-### Future Testing (Phase 3+)
-- Verify webview panel creation
-- Verify Chart.js rendering
-- Test chart interactivity
+### Test Cases Covered
+- Context menu appears during Python debugging ✅
+- Context menu plots variables without input prompt ✅
+- Command Palette fallback with manual input ✅
+- Non-Python debug sessions don't show menu ✅
+- Error handling for empty/invalid data ✅
+- Multiple sequential plots work correctly ✅
+- Extension activates on debug start (not VS Code startup) ✅
 
 ## Known Limitations (POC Scope)
 - Only 1D numeric data (lists and numpy arrays)
