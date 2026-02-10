@@ -1,14 +1,14 @@
 # CLAUDE.md - AI Assistant Working Memory
 
-**Last Updated:** 2026-02-10 (Session 5)
+**Last Updated:** 2026-02-10 (Session 6)
 
 ## Project: DebugPlot VS Code Extension POC
 
 ### Current Status
-- **Phase:** Phase 4 - Context Menu Integration (✅ IMPLEMENTATION COMPLETE, READY FOR TESTING)
-- **Session:** 5
-- **Current Step:** Phase 4 core implementation finished, context menu integrated with DAP
-- **Next Steps:** Manual testing of Phase 4, then Phase 5 - Polish & Package
+- **Phase:** Phase 5 - Automated Testing Infrastructure (✅ IMPLEMENTATION COMPLETE)
+- **Session:** 6
+- **Current Step:** Hybrid testing framework (70-75% automated, 25-30% manual) implemented
+- **Next Steps:** Run automated tests to verify, then Phase 6 - Polish & Package
 
 ### Environment Status
 ✅ **All Tools Ready:**
@@ -40,11 +40,22 @@
 │       ├── .vscode/                           # Debug configurations
 │       │   ├── launch.json
 │       │   └── tasks.json
+│       ├── .vscode-test.mjs                   # ✅ Test runner configuration
 │       ├── src/
-│       │   └── extension.ts                   # Main extension code
+│       │   ├── extension.ts                   # Main extension code
+│       │   └── test/
+│       │       ├── integration.test.ts        # ✅ Integration test suite (18 tests)
+│       │       └── fixtures/
+│       │           ├── test_data.py           # ✅ Test data script
+│       │           └── .vscode/
+│       │               ├── launch.json        # ✅ Test workspace config
+│       │               └── settings.json      # ✅ Test workspace settings
 │       ├── out/
 │       │   ├── extension.js                   # Compiled output
-│       │   └── extension.js.map
+│       │   ├── extension.js.map
+│       │   └── test/
+│       │       ├── integration.test.js        # ✅ Compiled tests
+│       │       └── integration.test.js.map
 │       ├── node_modules/                      # 259 packages installed
 │       ├── package.json                       # Extension manifest
 │       ├── tsconfig.json                      # TypeScript config
@@ -56,7 +67,15 @@
 
 ### Files to Track
 - **Plan Documents:** `poc/docs/*.md` ✅
+  - Phase plans (cc.00X.plan-*.md)
+  - Testing analysis (cc.011.analysis-options-for-automated-testing.md)
+  - Testing plan (cc.012.plan-automated-testing-detailed.md)
+  - Manual checklist (cc.013.manual-testing-checklist.md) ✅
+  - Testing guide (cc.014.testing-guide.md) ✅
 - **Extension Code:** `poc/extension/` ✅ CREATED
+  - Source: `src/extension.ts`
+  - Tests: `src/test/integration.test.ts` ✅
+  - Test fixtures: `src/test/fixtures/` ✅
 - **Test Scripts:** `poc/test-scripts/` ✅ CREATED
 
 ### Important Notes
@@ -207,3 +226,38 @@
   - Committed to git: commit c52efd8
   - Updated CLAUDE.md with Phase 4 progress
 - **Phase 4 Status:** ✅ IMPLEMENTATION COMPLETE - Ready for Manual Testing
+
+**Session 6 (2026-02-10):**
+- **Automated Testing Implementation** ✅ COMPLETE
+  - Reviewed detailed testing plan (cc.012.plan-automated-testing-detailed.md)
+  - Created `.vscode-test.mjs` configuration with VS Code test runner setup
+  - Created test fixtures directory structure: `src/test/fixtures/`
+  - Created `test_data.py` with 6 test variables matching test plan requirements
+  - Created test workspace launch config: `fixtures/.vscode/launch.json`
+  - Created test workspace settings: `fixtures/.vscode/settings.json`
+  - Implemented comprehensive integration test suite (`src/test/integration.test.ts`):
+    - **Test Group 1:** Extension Activation (2 tests)
+    - **Test Group 2:** Debug Session Requirement (1 test)
+    - **Test Group 3:** Variable Data Reading via DAP (6 tests - all test variables)
+    - **Test Group 4:** Error Handling (4 tests)
+    - **Test Group 5:** Context Menu Code Path (2 tests)
+    - **Test Group 6:** Command Palette Code Path (1 test)
+    - **Test Group 7:** Webview Integration (2 tests)
+    - **Total:** 18 automated test cases
+  - Helper functions implemented: `startDebugSession()`, `stopDebugSession()`, `evaluateVariable()`
+- **Compilation Verification** ✅ SUCCESSFUL
+  - TypeScript compilation with zero errors
+  - Test files compiled to `out/test/integration.test.js`
+  - All dependencies satisfied
+- **Documentation Created** ✅ COMPLETE
+  - Manual testing checklist: `cc.013.manual-testing-checklist.md` (5 items, ~5 min)
+  - Comprehensive testing guide: `cc.014.testing-guide.md` (setup, troubleshooting, CI/CD)
+  - Hybrid approach: 70-75% automated, 25-30% manual visual verification
+- **Testing Architecture Highlights:**
+  - Uses VS Code's real test runner (`@vscode/test-electron`)
+  - Creates isolated test workspace with test fixtures
+  - Validates DAP communication with Python debug sessions
+  - Tests both context menu and Command Palette code paths
+  - Includes webview panel creation verification
+  - Timeout handling for debug session initialization (20-30s)
+- **Status:** ✅ IMPLEMENTATION COMPLETE - Ready for Test Execution
