@@ -26,7 +26,7 @@
       "debug/variables/context": [
         {
           "command": "debugplot.plotVariable",
-          "when": "debugType == 'python'"
+          "when": "debugType == 'debugpy' || debugType == 'python'"
         }
       ]
     }

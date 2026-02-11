@@ -5,7 +5,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     let disposable = vscode.commands.registerCommand(
         'debugplot.plotVariable',
-        async (context?: any) => {
+        async (commandArg?: any) => {
             // Step 1: Check for active debug session
             const session = vscode.debug.activeDebugSession;
             if (!session) {
@@ -18,9 +18,12 @@ export function activate(context: vscode.ExtensionContext) {
             let variableName: string | undefined;
 
             try {
-                // Step 2: Get variable name from context or prompt
-                if (context && (context.evaluateName || context.name)) {
-                    variableName = context.evaluateName || context.name;
+                // Step 2: Get variable name from context menu arg or prompt
+                // When invoked from debug/variables/context menu, VS Code passes
+                // an object with a nested .variable property containing DAP Variable fields
+                const variable = commandArg?.variable ?? commandArg;
+                if (variable && (variable.evaluateName || variable.name)) {
+                    variableName = variable.evaluateName || variable.name;
                     console.log(`DebugPlot: Variable from context menu: '${variableName}'`);
                 } else {
                     variableName = await vscode.window.showInputBox({
@@ -111,7 +114,7 @@ export function activate(context: vscode.ExtensionContext) {
 
                 // Step 6: Success — create the chart panel
                 console.log(`DebugPlot: Read ${data.length} values from '${variableName}':`, data);
-                createPlotPanel(context, variableName, data as number[]);
+                createPlotPanel(variableName, data as number[]);
                 console.log(`DebugPlot: Created chart panel for '${variableName}' with ${data.length} values`);
 
             } catch (err: any) {
@@ -143,7 +146,6 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function createPlotPanel(
-    context: vscode.ExtensionContext,
     variableName: string,
     data: number[]
 ): vscode.WebviewPanel {
