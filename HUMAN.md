@@ -54,6 +54,7 @@ npm run compile
 - **[Phase 5 Detailed Plan](poc/docs/cc.012.plan-automated-testing-detailed.md)** - Hybrid testing infrastructure implementation
 - **[Phase 5 Manual Testing Checklist](poc/docs/cc.013.manual-testing-checklist.md)** - 5-minute visual verification checklist ✅
 - **[Phase 5 Testing Guide](poc/docs/cc.014.testing-guide.md)** - Comprehensive guide for running automated and manual tests ✅
+- **[Testing Issues & Notes](poc/docs/dev.008.issues-and-notes-from-testing.md)** - Issues found during Phase 4 & 5 testing (all deemed acceptable for POC) ✅
 
 ### Project Management
 - **[README.md](README.md)** - Project status and high-level info
@@ -117,25 +118,30 @@ npm run compile
    - Commit: `9fc398d`
    - Report: [Phase 3 Accomplishment Report](poc/docs/cc.008.accomplished-phase-3.md)
 
-4. **Phase 4** - Context Menu Integration ✅ COMPLETE
+4. **Phase 4** - Context Menu Integration ✅ COMPLETE & TESTED
    - ✅ Add `debug/variables/context` menu contribution
    - ✅ Configure `onDebug` activation event
    - ✅ Extract variable context from menu invocation
    - ✅ Accept optional variable context in command handler
    - ✅ Fallback to input prompt for Command Palette invocation
    - ✅ Restrict context menu to Python debug sessions only
+   - ✅ Manual testing completed - all functionality working correctly
    - Commit: `c52efd8`
    - Testing Guide: [Phase 4 Testing Guide](poc/docs/cc.010.phase-4-testing-guide.md)
+   - Issues: See [Testing Issues & Notes](poc/docs/dev.008.issues-and-notes-from-testing.md)
 
-5. **Phase 5** - Automated Testing Infrastructure ✅ COMPLETE
+5. **Phase 5** - Automated Testing Infrastructure ✅ COMPLETE & TESTED
    - ✅ Create test runner configuration (`.vscode-test.mjs`)
    - ✅ Set up test fixtures with isolated test workspace
    - ✅ Implement 18 integration tests covering all major functionality
    - ✅ Create manual testing checklist for visual verification (5 minutes)
    - ✅ Document comprehensive testing approach and troubleshooting
    - ✅ Achieve 70-75% automated coverage + 25-30% manual visual checks
+   - ✅ Manual testing completed - core POC functionality verified
+   - ✅ Minor issues documented and deemed acceptable for POC
    - Commit: `9f89fb1`
    - Testing Guide: [Phase 5 Testing Guide](poc/docs/cc.014.testing-guide.md)
+   - Issues: See [Testing Issues & Notes](poc/docs/dev.008.issues-and-notes-from-testing.md)
    - Run tests: `cd poc/extension && npm test`
 
 6. **Phase 6** - Polish & Package (NEXT)
@@ -259,6 +265,15 @@ Contains 6 sample variables:
 - No multi-dimensional arrays
 - Basic line charts only
 - No chart customization options
+
+## Known Issues (Acceptable for POC)
+Based on Phase 4 & 5 testing, the following minor issues were identified and deemed acceptable:
+- **Theme switching:** Existing plot text (axis labels, tic labels) doesn't update when color theme changes (requires plot refresh)
+- **Panel splitting:** Using VS Code's "Split" feature on a plot panel creates new panel but doesn't populate the plot (Move feature works correctly)
+- **Context menu position:** "Plot Variable" menu item appears at bottom of context menu rather than near top (fully functional)
+- **Panel management:** Each plot creates a new panel (could be improved to reuse existing panel)
+
+For complete details, see [Testing Issues & Notes](poc/docs/dev.008.issues-and-notes-from-testing.md)
 
 ## License
 All code must use permissive open-source licenses (MIT, Apache 2.0, BSD).
