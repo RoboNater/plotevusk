@@ -33,6 +33,13 @@
       "program": "${workspaceFolder}/../test-scripts/plot_test_basic.py",
       "console": "integratedTerminal",
       "justMyCode": false
+    },
+    {
+      "name": "Performance Test",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/../test-scripts/plot_test_performance.py",
+      "console": "integratedTerminal"
     }
   ]
 }
