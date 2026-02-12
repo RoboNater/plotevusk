@@ -61,23 +61,45 @@ print("done")
 
 ### Setup Instructions
 
+**IMPORTANT:** You must run the extension in the Extension Development Host FIRST, then run the performance test in that new window.
+
+#### Step 1: Launch the Extension Development Host
+
 1. **Open Extension Directory:**
    ```bash
    cd /home/alfred/lw/w514-plot-in-vscode/poc/extension
    code .
    ```
 
-2. **Launch Performance Test Script:**
+2. **Launch Extension Development Host:**
    - Open VS Code Debug menu
-   - Select configuration: **"Performance Test"** (from dropdown)
+   - Select configuration: **"Run Extension"** (from dropdown)
    - Press **F5** or click Run
-   - Script will pause at breakpoint with all 4 test variables in scope
+   - A new VS Code window will open titled **"[Extension Development Host]"**
+   - This window has the DebugPlot extension loaded and active
 
-3. **Variables Available:**
+#### Step 2: Run Performance Test in Extension Development Host
+
+**In the NEW Extension Development Host window:**
+
+3. **Open Performance Test Script:**
+   - File → Open File (or `Ctrl+O`)
+   - Navigate to: `/home/alfred/lw/w514-plot-in-vscode/poc/test-scripts/plot_test_performance.py`
+   - Open the file
+
+4. **Start Debugging the Python Script:**
+   - Press **F5** to start debugging
+   - Select **"Python Debugger"** if prompted for debugger type
+   - The script will automatically pause at `breakpoint()` line
+   - Variables pane will now show all 4 test variables
+
+5. **Variables Available:**
    - `small` - 100 elements
    - `medium` - 1,000 elements
    - `large` - 10,000 elements
    - `very_large` - 50,000 elements
+
+**Note:** The "Plot Variable" context menu item will ONLY appear when debugging in the Extension Development Host window, not in the original window where you launched the extension.
 
 ### Test Execution
 
@@ -219,6 +241,16 @@ For each test, record observations:
 ---
 
 ## Troubleshooting
+
+### "Plot Variable" context menu item doesn't appear
+- **Most Common Cause:** You're debugging in the wrong VS Code window
+- **Check:** Are you in the **Extension Development Host** window (check window title)?
+- **Solution:**
+  1. Close the Python debug session
+  2. Go back to the original VS Code window
+  3. Press F5 to launch "Run Extension" (if not already running)
+  4. In the NEW "[Extension Development Host]" window, open and debug the performance test script
+  5. The context menu item will now appear
 
 ### Chart doesn't appear after clicking "Plot Variable"
 - **Check:** Is debug session still paused at breakpoint?

@@ -9,6 +9,15 @@
       "console": "integratedTerminal",
       "stopOnEntry": false,
       "justMyCode": true
+    },
+    {
+      "name": "Debug Performance Script",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/plot_test_performance.py",
+      "console": "integratedTerminal",
+      "stopOnEntry": false,
+      "justMyCode": true
     }
   ]
 }
