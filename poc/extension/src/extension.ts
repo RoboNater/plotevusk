@@ -96,7 +96,25 @@ export function activate(context: vscode.ExtensionContext) {
                     jsonString = jsonString.slice(1, -1);
                 }
 
-                const data: unknown = JSON.parse(jsonString);
+                let data: unknown;
+                try {
+                    data = JSON.parse(jsonString);
+                } catch (parseError: any) {
+                    // JSON parse error - likely due to truncated data from large arrays
+                    if (parseError.message.includes('Unterminated') ||
+                        parseError.message.includes('Unexpected end')) {
+                        vscode.window.showErrorMessage(
+                            `DebugPlot: Array '${variableName}' is too large to plot. ` +
+                            `Maximum supported size is ~10,000 elements. ` +
+                            `Try plotting a smaller subset of the data.`
+                        );
+                    } else {
+                        vscode.window.showErrorMessage(
+                            `DebugPlot: Cannot parse data from '${variableName}': ${parseError.message}`
+                        );
+                    }
+                    return;
+                }
 
                 if (!Array.isArray(data) || !data.every(v => typeof v === 'number')) {
                     vscode.window.showErrorMessage(
@@ -112,10 +130,21 @@ export function activate(context: vscode.ExtensionContext) {
                     return;
                 }
 
+                // Check for large arrays and truncate if necessary
+                const MAX_ELEMENTS = 10000;
+                let actualData = data as number[];
+                if (actualData.length > MAX_ELEMENTS) {
+                    vscode.window.showWarningMessage(
+                        `DebugPlot: Array '${variableName}' has ${actualData.length} elements. ` +
+                        `Plotting first ${MAX_ELEMENTS} only.`
+                    );
+                    actualData = actualData.slice(0, MAX_ELEMENTS);
+                }
+
                 // Step 6: Success — create the chart panel
-                console.log(`DebugPlot: Read ${data.length} values from '${variableName}':`, data);
-                createPlotPanel(variableName, data as number[]);
-                console.log(`DebugPlot: Created chart panel for '${variableName}' with ${data.length} values`);
+                console.log(`DebugPlot: Read ${actualData.length} values from '${variableName}':`, actualData);
+                createPlotPanel(variableName, actualData);
+                console.log(`DebugPlot: Created chart panel for '${variableName}' with ${actualData.length} values`);
 
             } catch (err: any) {
                 const varName = variableName || 'variable';
