@@ -3,6 +3,23 @@
   "displayName": "DebugPlot",
   "description": "Plot numeric variables during Python debugging",
   "version": "0.0.1",
+  "publisher": "debugplot-poc",
+  "author": "DebugPlot Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/debugplot/debugplot-poc"
+  },
+  "keywords": [
+    "python",
+    "debug",
+    "visualization",
+    "plot",
+    "chart",
+    "numpy",
+    "debugger",
+    "data visualization"
+  ],
   "engines": {
     "vscode": "^1.95.0"
   },
