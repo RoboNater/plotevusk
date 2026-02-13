@@ -144,12 +144,23 @@ npm run compile
    - Issues: See [Testing Issues & Notes](poc/docs/dev.008.issues-and-notes-from-testing.md)
    - Run tests: `cd poc/extension && npm test`
 
-6. **Phase 6** - Polish & Package (NEXT)
-   - Error handling refinements
-   - Performance review (large arrays 1000+ elements)
-   - Package as .vsix with `vsce package`
-   - Installation and smoke testing
-   - Final documentation and demo screenshots
+6. **Phase 6** - Polish & Package (IN PROGRESS)
+   - ✅ Step 1: Error Handling Review & Validation (COMPLETE)
+   - ✅ Step 2: Performance Validation (COMPLETE)
+   - ✅ Step 3: Documentation Polish (COMPLETE)
+     - Created USAGE_EXAMPLES.md with 7 real-world examples
+     - README.md already includes comprehensive user guide
+   - ✅ Step 4: Pre-Package Validation (COMPLETE)
+     - TypeScript: Clean compilation ✅
+     - Tests: 16/17 passing ✅
+     - Dependencies: Secure, current ✅
+   - ✅ Step 5: Package the Extension (COMPLETE)
+     - Built debugplot-0.0.1.vsix (13 KB)
+     - Package verified and ready for distribution
+   - ⏳ Step 6: Install and Test Packaged Extension (NEXT - READY FOR MANUAL TESTING)
+   - ⏳ Step 7: Performance Benchmarking
+   - ⏳ Step 8: Final Validation & Documentation
+   - Report: [Phase 6 Steps 3-5 Accomplishment Report](poc/docs/cc.024.accomplished-phase-6-steps-3-4-5.md)
 
 ## Resources
 
@@ -225,7 +236,107 @@ After running automated tests, perform visual verification:
 5. Enter the variable name in the input prompt
 6. Chart renders in a new webview panel
 
-### Phase 4 Testing (Current - READY FOR MANUAL TESTING)
+### Phase 6 Testing (Current - PACKAGED EXTENSION, READY FOR INSTALLATION)
+
+**Status:** ✅ Extension packaged as `debugplot-0.0.1.vsix` (13 KB) and ready for installation testing.
+
+**Next Step:** Install the .vsix package and test functionality with the installed extension.
+
+#### Installation Instructions
+
+**Method 1: Command Line (Recommended)**
+```bash
+code --install-extension /home/alfred/lw/w514-plot-in-vscode/poc/extension/debugplot-0.0.1.vsix
+```
+
+**Method 2: VS Code UI**
+1. Open VS Code
+2. Open Extensions view (`Ctrl+Shift+X` or `Cmd+Shift+X`)
+3. Click "..." menu → "Install from VSIX..."
+4. Select `debugplot-0.0.1.vsix` from `/home/alfred/lw/w514-plot-in-vscode/poc/extension/`
+
+**Method 3: Verify Installation**
+```bash
+code --list-extensions | grep debugplot
+# Should output: debugplot
+```
+
+#### Test Procedure
+
+After installing the packaged extension, perform the following tests:
+
+**Test 1: Extension Activation**
+1. Restart VS Code (important: fresh start with installed extension)
+2. Open `/home/alfred/lw/w514-plot-in-vscode/poc/test-scripts/plot_test_basic.py`
+3. Start debugging (F5)
+4. Wait for breakpoint to pause execution
+5. ✅ Verify: No activation errors in Developer Console (Help → Toggle Developer Tools)
+
+**Test 2: Right-Click Context Menu**
+1. In Variables pane, right-click `data_list`
+2. ✅ Verify: "Plot Variable" appears in context menu
+3. Click "Plot Variable"
+4. ✅ Verify: Chart panel opens with line chart
+5. ✅ Verify: Chart title shows "Plot: data_list (7 values)"
+6. ✅ Verify: 7 data points visible: [1, 4, 9, 16, 25, 36, 49]
+
+**Test 3: NumPy Array Support**
+1. Right-click `data_np` in Variables pane
+2. Select "Plot Variable"
+3. ✅ Verify: Chart renders correctly with numpy array data
+
+**Test 4: Command Palette Alternative**
+1. Open Command Palette (`Ctrl+Shift+P`)
+2. Type "DebugPlot: Plot Variable"
+3. ✅ Verify: Command appears
+4. Select command
+5. ✅ Verify: Input prompt appears asking for variable name
+6. Enter "data_float_list"
+7. ✅ Verify: Chart renders with the correct data
+
+**Test 5: Error Handling**
+1. Right-click `data_none` in Variables pane
+2. Select "Plot Variable"
+3. ✅ Verify: Error message appears: "No plottable data in 'data_none' (variable is None)"
+4. Right-click `empty_list`
+5. ✅ Verify: Error message: "No plottable data in 'empty_list' (variable is empty)"
+
+**Test 6: Theme Integration**
+1. Plot any variable (e.g., `data_list`)
+2. Switch VS Code theme (File → Preferences → Color Theme)
+3. ✅ Verify: Chart background and grid adapt to light/dark theme
+4. Note: Axis label text colors won't update (known limitation documented in README.md)
+
+**Test 7: Large Arrays (Optional)**
+1. Start debugging `poc/test-scripts/plot_test_performance.py`
+2. Right-click `large` (10,000 elements)
+3. ✅ Verify: Chart renders (may take 1-2 seconds)
+4. Try `too_large` (50,000+ elements)
+5. ✅ Verify: Clear error message about size limit
+
+#### Success Criteria
+
+All of the following should pass:
+- [ ] Extension installs without errors
+- [ ] Extension appears in Extensions list
+- [ ] No console errors during activation
+- [ ] Right-click context menu works and shows "Plot Variable"
+- [ ] Charts render correctly with proper data
+- [ ] Command Palette works with manual input
+- [ ] Error cases show user-friendly messages
+- [ ] Theme integration works (background/grid colors)
+- [ ] Multiple plots can be created sequentially
+
+#### Documentation Links
+
+- **User Guide:** See [Extension README](poc/extension/README.md) for complete feature list
+- **Usage Examples:** See [USAGE_EXAMPLES.md](poc/docs/USAGE_EXAMPLES.md) for 7 detailed examples
+- **Performance Info:** See [README Performance Table](poc/extension/README.md#performance)
+- **Troubleshooting:** See [README Limitations](poc/extension/README.md#limitations-poc-version)
+
+---
+
+### Phase 4 Testing (Development Host Testing - ALREADY COMPLETED)
 
 **Test Script:** `poc/test-scripts/plot_test_basic.py`
 Contains 6 sample variables:
