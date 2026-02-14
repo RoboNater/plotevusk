@@ -9,8 +9,9 @@ Compare to:  VS Code Extension "Python Debug Plotter: Arrays, Tensors & Graphs"
              Extension ID: inag-ufscar.python-debug-plotter VS Code Extension
              github:  https://github.com/chcomin/vscode-python-debug-plotter
 
-The inag-ufscar extension is more capable and more mature than Plotevusk (aka DebugPlot),
+The inag-ufscar extension is more capable and more mature than this extension (Plotevusk, aka DebugPlot),
 while this extension is simpler and easier to understand than the above.
+See opus-4.6 generated comparison of this extension (ext1) vs inga-ufscar extenion (ext2) in: [poc/docs/comparison-to-inag-ufscar.python-debug-plotter/comparison-results.md](poc/docs/comparison-to-inag-ufscar.python-debug-plotter/comparison-results.md)
 
 ## Status
 - **Start Date:** 2026-02-06
