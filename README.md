@@ -5,6 +5,12 @@ A proof-of-concept VS Code extension that adds inline plotting capability to Pyt
 
 **Goal:** Hit a breakpoint → right-click a variable → see a plot. That's it.
 
+Compare to:  VS Code Extension "Python Debug Plotter: Arrays, Tensors & Graphs"
+             Extension ID: inag-ufscar.python-debug-plotter VS Code Extension
+             github:  https://github.com/chcomin/vscode-python-debug-plotter
+
+This extension is less capable, less mature, and simpler than the above.
+
 ## Status
 - **Start Date:** 2026-02-06
 - **Current Phase:** Phase 5 - Automated Testing Infrastructure ✅ COMPLETE & TESTED
