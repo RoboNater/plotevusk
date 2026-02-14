@@ -36,3 +36,18 @@ All test steps were executed.  All test steps passed except for the following:
 1. Each plot is created in its own VS Code panel.  It would be better to only create a new panel if a plot panel does not exist already, and otherwise to plot to the existing panel or most recently used panel. Then the user can manage the plots and panels using standard VS Code tab-management functionality such as split, move, or drag-and-drop.
 
 2. The right-click context menu item "Plot Variable" does not have an icon. This seems okay as the other context menu items do not have icons either. The only reason it is mentioned here is that Test 4 hints at an icon with "Menu item shows correct text and icon (if any)".
+
+## Phase 6 
+
+### Overall
+
+Everything works well enough to call the MVP successfully finished!
+
+### Current defficiencies
+
+1. Each plot is created in its own VS Code panel (see discussion of this in earlier notes)
+
+2. The "Split" and "Move" capabilities inherent in VS Code tab/panel management do not work for these plots, i.e. the plot moves to a new panel but renders blank. Previous testing showed that the split capability did not work but that the move capability did work. Not sure if this new finding is environment-dependent (tested with vsix installed in clean Windows only environment vs extension dev host in remote wsl2).
+
+3. As noted after phase 3 testing, not all parts of existing plots update when the color theme is changed.  All text (title, axes labels, and tic labels) stay the same color.
+
